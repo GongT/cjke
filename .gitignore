@@ -1,0 +1,9 @@
+.idea/
+!.idea/cjke.iml
+!.idea/modules.xml
+!.idea/codeStyles
+node_modules
+dist
+.rpt2_cache
+*.tgz
+*.log

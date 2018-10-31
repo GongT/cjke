@@ -1,0 +1,29 @@
+{
+	"compilerOptions": {
+		"declaration": false,
+		"inlineSourceMap": true,
+		"inlineSources": false,
+		"module": "commonjs",
+		"target": "esnext",
+		"lib": [
+			"es5",
+			"es6",
+			"es7",
+			"esnext"
+		],
+		"allowJs": false,
+		"checkJs": false,
+		"outDir": "../dist",
+		"noEmitOnError": false,
+		"types": [
+			"node"
+		],
+		"typeRoots": [
+			"../node_modules/@types",
+			"../typings/"
+		]
+	},
+	"files": [
+		"test.ts"
+	]
+}

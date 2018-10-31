@@ -1,0 +1,46 @@
+{
+	"name": "cjke-strings",
+	"version": "1.0.0",
+	"description": "a set of Chinese Japanese Korean and Emoji strings helpers",
+	"keywords": [
+		"string",
+		"unicode",
+		"emoji",
+		"CJK",
+		"display width",
+		"chinese"
+	],
+	"typings": "dist/_index.d.ts",
+	"main": "dist/index.js",
+	"jsnext:main": "dist/esnext.js",
+	"license": "MIT",
+	"repository": "https://github.com/GongT/cjke.git",
+	"scripts": {
+		"watch": "tsc -p src -w",
+		"build": "yon run build:exports && rollup -c build/rollup.config.js",
+		"prepublishOnly": "rollup -c build/rollup.config.js",
+		"test": "tsc -p src/tsconfig.test.json && mocha dist/test.js",
+		"build:exports": "export-all-in-one \"src/tsconfig.json\" && export-all-in-one -c \"src/tsconfig.d.json\""
+	},
+	"dependencies": {
+		"ansi-regex": "^3.0.0",
+		"emoji-regex": "^7.0.1",
+		"is-fullwidth-code-point": "^2.0.0"
+	},
+	"devDependencies": {
+		"@gongt/export-all-in-one": "^1.0.7",
+		"@types/chai": "^4.1.7",
+		"@types/emoji-regex": "^7.0.0",
+		"@types/mocha": "^5.2.5",
+		"chai": "^4.2.0",
+		"mocha": "^2.5.3",
+		"rollup": "^0.65.0",
+		"rollup-plugin-commonjs": "^9.1.6",
+		"rollup-plugin-node-resolve": "^3.3.0",
+		"rollup-plugin-typescript2": "^0.17.0",
+		"source-map-support": "^0.5.9",
+		"ts-node": "^7.0.1",
+		"typescript": "^3.1.4",
+		"yon": "^0.2.1"
+	}
+}
