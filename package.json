@@ -1,6 +1,6 @@
 {
 	"name": "cjke-strings",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "a set of Chinese Japanese Korean and Emoji strings helpers",
 	"keywords": [
 		"string",
@@ -18,8 +18,7 @@
 	"repository": "https://github.com/GongT/cjke.git",
 	"scripts": {
 		"watch": "tsc -p src -w",
-		"build": "yon run build:exports && rollup -c build/rollup.config.js",
-		"prepublishOnly": "rollup -c build/rollup.config.js",
+		"prepublishOnly": "yarn run build:exports && rollup -c build/rollup.config.js",
 		"test": "tsc -p src/tsconfig.test.json && mocha dist/test.js",
 		"build:exports": "export-all-in-one \"src/tsconfig.json\" && export-all-in-one -c \"src/tsconfig.d.json\""
 	},
@@ -41,7 +40,6 @@
 		"rollup-plugin-typescript2": "^0.17.0",
 		"source-map-support": "^0.5.9",
 		"ts-node": "^7.0.1",
-		"typescript": "^3.1.4",
-		"yon": "^0.2.1"
+		"typescript": "^3.1.4"
 	}
 }

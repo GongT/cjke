@@ -6,7 +6,7 @@
         "noEmit": false,
         "emitDeclarationOnly": true,
         "noEmitOnError": false,
-        "outFile": "..\\dist\\_index"
+        "outFile": "../dist/_index"
     },
     "exclude": [],
     "include": [],
