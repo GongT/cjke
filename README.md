@@ -21,17 +21,12 @@ describe("typescript", () => {
 
 ## APIs
  * isCombiningCharacters - detect a character is in Combining Characters table
- * readFirstCompleteChar - get first complete character at beginning of given string, prevent &#FFFF; or ?
+ * readFirstCompleteChar - get first complete character at beginning of given string, prevent ￿ or ?
  * unicodeEscape - escape string as "\uxxxx\uxxxx\uxxxx" form
  * limitWidth - cut a limited display width of a string
  * stringWidth - calculate display width of a string
 
-> Note:
-> All param "windowsConsole" defaults to `false`.
-> When `true`, combine marks (eg. A&#0300;) will count as width 1, emoji chain (👍🏽) will treat as many emojis (👍+🏽).
-> This is used for windows console
-
-#### readFirstCompleteChar(str: string, windowsConsole = false): CodePointInfo
+### readFirstCompleteChar(str: string, windowsConsole = false): CodePointInfo
 |var |desc|
 |----|----|
 |str|any string|
@@ -46,7 +41,7 @@ describe("typescript", () => {
 |length| number|string length of that char|
 |visible| boolean|should the char visible?|
 
-#### function limitWidth(str: string, limit: number, windowsConsole = false): LimitResult
+### function limitWidth(str: string, limit: number, windowsConsole = false): LimitResult
 |var |desc|
 |----|----|
 |str|any string|
@@ -60,7 +55,7 @@ describe("typescript", () => {
 |result| string|cut result|
 |width| number|real display width of result|
 
-#### function stringWidth(str: string, windowsConsole = false): number
+### function stringWidth(str: string, windowsConsole = false): number
 |var |desc|
 |----|----|
 |str|any string|
@@ -68,14 +63,25 @@ describe("typescript", () => {
 |{return}|the display width of str|
 
 
-#### function isCombiningCharacters(code: number): boolean
+### function isCombiningCharacters(code: number): boolean
 |var |desc|
 |----|----|
 |code|return value of `'string'.charCodeAt()`|
 |{return}|is in combine char list|
 
-#### function unicodeEscape(str: string): string
+### function unicodeEscape(str: string): string
 |var |desc|
 |----|----|
 |str|any string|
 |{return}|escaped string|
+
+## Windows console
+Windows Console (the black window) is not fully support unicode, so there is some workaround. Default is `false`.
+
+|char|default|when true|
+|:---:|---:|---:|
+|À|1|2|
+|😂̀|2|3|
+|À̀̀̀̀̀̀̀̀̀̀̀̀̀̀̀̀̀̀̀̀̀̀̀|1|25|
+|啊|2|2|
+|👍🏽|2|4(👍+🏽)|
