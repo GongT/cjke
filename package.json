@@ -1,6 +1,6 @@
 {
 	"name": "cjke-strings",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "a set of Chinese Japanese Korean and Emoji strings helpers",
 	"keywords": [
 		"string",
@@ -8,6 +8,7 @@
 		"emoji",
 		"CJK",
 		"display width",
+		"string width",
 		"chinese"
 	],
 	"typings": "dist/_index.d.ts",
