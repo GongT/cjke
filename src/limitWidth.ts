@@ -1,8 +1,9 @@
 import { readFirstCompleteChar } from './firstCompleteChar';
+import { allSupport, SupportInfo } from './base';
 
 export interface LimitResult {
 	toString(): string;
-	
+
 	result: string;
 	width: number;
 }
@@ -19,23 +20,23 @@ function returnValue(result: string, width: number): LimitResult {
 	} as any;
 }
 
-export function limitWidth(original: string, limit: number, windowsConsole = false): LimitResult {
+export function limitWidth(original: string, limit: number, supports: SupportInfo = allSupport): LimitResult {
 	let width = 0;
 	let str = original;
 	while (str.length > 0) {
-		const item = readFirstCompleteChar(str, windowsConsole);
-		
-		const nextWidth = width + item.length;
+		const item = readFirstCompleteChar(str, supports);
+
+		const nextWidth = width + item.width;
 		if (nextWidth > limit) {
 			return returnValue(original.slice(0, original.length - str.length), width);
 		}
 		width += item.width;
 		if (width === limit) {
-			return returnValue(original.slice(0, original.length - str.length), width);
+			return returnValue(original.slice(0, original.length - str.length + item.length), width);
 		}
-		
+
 		str = str.slice(item.length);
 	}
-	
+
 	return returnValue(original, width);
 }

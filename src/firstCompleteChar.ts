@@ -1,4 +1,4 @@
-import { ansiRegexStarting, emojiRegexStarting, emojiSimpleRegex } from './base';
+import { allSupport, ansiRegexStarting, emojiRegexStarting, emojiSimpleRegex, SupportInfo } from './base';
 import { combiningCharactersRegexStarting, isCombiningCharacters } from './combiningCharacters';
 import { isFullwidthCodePoint } from './rollup';
 
@@ -9,43 +9,48 @@ export interface CodePointInfo {
 	visible: boolean; // some char visible on win console
 }
 
-export function readFirstCompleteChar(str: string, windowsConsole = false): CodePointInfo {
+export function readFirstCompleteChar(str: string, supports: SupportInfo = allSupport): CodePointInfo {
 	if (!str) {
-		return {data: '', width: 0, length: 0, visible: false};
+		return { data: '', width: 0, length: 0, visible: false };
 	}
 	const code = str.codePointAt(0);
 	let ret: CodePointInfo;
-	
+
 	if (code <= 0xFF) {
 		// ansi control sequence
 		const ansiMatch = str.match(ansiRegexStarting);
 		if (ansiMatch) {
 			return commonInvisible(ansiMatch[0]);
 		}
-		
+
 		// ansi control characters
 		if (code <= 0x1F || (code >= 0x7F && code <= 0x9F)) {
 			return commonInvisible(str[0]);
 		}
-		
+
 		// common ansi char
 		ret = commonSingleChar(str, code);
 	} else if (isCombiningCharacters(code)) {
 		// handle multiple combine char
 		const allChars = str.match(combiningCharactersRegexStarting);
-		
-		return windowsSquareDisplayedCharInvisible(allChars[0], windowsConsole);
+
+		return {
+			data   : allChars[0],
+			width  : supports.combining? 0 : allChars[0].length,
+			length : allChars[0].length,
+			visible: false,
+		};
 	} else {
 		// emoji
 		const emojiMatch = str.match(emojiRegexStarting);
 		if (emojiMatch) {
 			ret = {
-				data: emojiMatch[0],
-				width: 2,
-				length: emojiMatch[0].length,
+				data   : emojiMatch[0],
+				width  : 2,
+				length : emojiMatch[0].length,
 				visible: true,
 			};
-			if (windowsConsole) {
+			if (!supports.emojiSequence) {
 				let i = 0;
 				while (emojiSimpleRegex.exec(emojiMatch[0])) {
 					i++;
@@ -55,9 +60,9 @@ export function readFirstCompleteChar(str: string, windowsConsole = false): Code
 		} else if (code > 0xFFFF) {
 			// Surrogates
 			ret = {
-				data: str.slice(0, 2),
-				width: isFullwidthCodePoint(code)? 2 : 1,
-				length: 2,
+				data   : str.slice(0, 2),
+				width  : isFullwidthCodePoint(code)? 2 : 1,
+				length : 2,
 				visible: true,
 			};
 		} else {
@@ -65,44 +70,35 @@ export function readFirstCompleteChar(str: string, windowsConsole = false): Code
 			ret = commonSingleChar(str, code);
 		}
 	}
-	
+
 	// look ahead for combining chars
 	const nextCode = str.codePointAt(ret.length);
 	if (isCombiningCharacters(nextCode)) {
 		const m = str.slice(ret.length).match(combiningCharactersRegexStarting);
 		ret.data += m[0];
 		ret.length += m[0].length;
-		if (windowsConsole) {
+		if (!supports.combining) {
 			ret.width += m[0].length;
 		}
 	}
-	
+
 	return ret;
 }
 
 function commonSingleChar(str: string, code: number) {
 	return {
-		data: str[0],
-		width: isFullwidthCodePoint(code)? 2 : 1,
-		length: 1,
+		data   : str[0],
+		width  : isFullwidthCodePoint(code)? 2 : 1,
+		length : 1,
 		visible: true,
 	};
 }
 
 function commonInvisible(str: string) {
 	return {
-		data: str,
-		width: 0,
-		length: str.length,
-		visible: false,
-	};
-}
-
-function windowsSquareDisplayedCharInvisible(str: string, win: boolean) {
-	return {
-		data: str,
-		width: win? str.length : 0,
-		length: str.length,
+		data   : str,
+		width  : 0,
+		length : str.length,
 		visible: false,
 	};
 }

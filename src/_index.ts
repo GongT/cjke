@@ -1,5 +1,6 @@
 //// - rollup
 //// - base
+export { SupportInfo } from './base';
 //// - combiningCharacters
 export { isCombiningCharacters } from './combiningCharacters';
 //// - escapeUnicode
