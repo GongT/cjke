@@ -41,11 +41,11 @@ describe('Basic', () => {
 			expect(r.width).is.equal(0);
 		});
 	});
-
+	
 	describe('Simple word', () => create('W', 1));
 	const colorEscape = '\x1B[38;5;10m';
 	describe(`${colorEscape}escape sequence\x1B[0m`, () => create(colorEscape, 0));
-
+	
 	describe('Escape character', () => create('\x1B', 0));
 	describe('Line feed', () => create('\r', 0));
 	describe('New line', () => create('\n', 0));
@@ -63,16 +63,16 @@ describe('CJK', () => {
 describe('Combining', () => {
 	describe('Ansi words', () => create('A\u0300', 1));
 	describe('Ansi words (cmd)', () => create('A\u0300', 2, true));
-
+	
 	describe('CJK words', () => create('啊\u0300', 2));
 	describe('CJK words (cmd)', () => create('啊\u0300', 3, true));
-
+	
 	describe('Multiple words', () => create('A\u0300\u0300\u0300', 1));
 	describe('Multiple words (cmd)', () => create('A\u0300\u0300\u0300', 4, true));
-
+	
 	describe('Character Only', () => create('\u0300', 0));
 	describe('Character Only (cmd)', () => create('\u0300', 1, true));
-
+	
 	describe('Multiple characters Only', () => create('\u0300\u0300\u0300', 0));
 	describe('Multiple characters Only (cmd)', () => create('\u0300\u0300\u0300', 3, true));
 });
@@ -81,13 +81,13 @@ describe('Combining', () => {
 describe('Emojis', () => {
 	describe('😂', () => create('😂', 2));
 	describe('👍 (cmd)', () => create('👍', 2, true));
-
+	
 	describe('combined 😂\u0300', () => create('😂\u0300', 2));
 	describe('combined 😂\u0300 (cmd)', () => create('😂\u0300', 3, true));
-
+	
 	describe('sequence 👍🏽', () => create('👍🏽', 2));
 	describe('sequence 👍🏽 (cmd)', () => create('👍🏽', 4, true));
-
+	
 	describe('combined sequence 👍🏽\u0300', () => create('👍🏽\u0300', 2));
 	describe('combined sequence 👍🏽\u0300 (cmd)', () => create('👍🏽\u0300', 5, true));
 });
@@ -101,6 +101,16 @@ describe('#stringWidth', () => {
 	describe('Width of 𠮟', () => {
 		it('should be 2', function () {
 			expect(stringWidth('𠮟')).to.equal(2);
+		});
+	});
+	describe('Width of D834 DD1E', () => {
+		it('should be 1', function () {
+			expect(stringWidth('\uD834\uDD1E')).to.equal(1);
+		});
+	});
+	describe('Width of D834 DD1E (cmd)', () => {
+		it('should be 2', function () {
+			expect(stringWidth('\uD834\uDD1E', windowsConsole)).to.equal(2);
 		});
 	});
 	describe('Width of 𠮟👍🏽', () => {
@@ -140,13 +150,13 @@ describe('#limitWidth', () => {
 	function repeat(char: string, n: number) {
 		return (new Array(n)).fill('').join(char);
 	}
-
+	
 	function limit(s: string, width: number, expectWidth: number, expectLength: number) {
 		const ret = limitWidth(s, width);
 		expect(ret.result).has.length(expectLength);
 		expect(ret.width).to.equal(expectWidth);
 	}
-
+	
 	it('can limit ansi', () => {
 		limit(repeat('-', 30), 20, 20, 20);
 	});

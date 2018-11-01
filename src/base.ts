@@ -18,8 +18,9 @@ export const emojiSimpleRegex = /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u
 export interface SupportInfo {
 	emojiSequence: boolean;
 	combining: boolean;
+	surrogates: boolean;
 }
 
-export const allSupport: SupportInfo = { emojiSequence: true, combining: true };
-export const windowsConsole: SupportInfo = { emojiSequence: false, combining: false };
-export const mintty: SupportInfo = { emojiSequence: false, combining: true };
+export const allSupport: SupportInfo = { emojiSequence: true, combining: true, surrogates: true };
+export const windowsConsole: SupportInfo = { emojiSequence: false, combining: false, surrogates: false };
+export const mintty: SupportInfo = { emojiSequence: false, combining: true, surrogates: true };

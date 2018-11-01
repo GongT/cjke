@@ -15,29 +15,29 @@ export function readFirstCompleteChar(str: string, supports: SupportInfo = allSu
 	}
 	const code = str.codePointAt(0);
 	let ret: CodePointInfo;
-
+	
 	if (code <= 0xFF) {
 		// ansi control sequence
 		const ansiMatch = str.match(ansiRegexStarting);
 		if (ansiMatch) {
 			return commonInvisible(ansiMatch[0]);
 		}
-
+		
 		// ansi control characters
 		if (code <= 0x1F || (code >= 0x7F && code <= 0x9F)) {
 			return commonInvisible(str[0]);
 		}
-
+		
 		// common ansi char
 		ret = commonSingleChar(str, code);
 	} else if (isCombiningCharacters(code)) {
 		// handle multiple combine char
 		const allChars = str.match(combiningCharactersRegexStarting);
-
+		
 		return {
-			data   : allChars[0],
-			width  : supports.combining? 0 : allChars[0].length,
-			length : allChars[0].length,
+			data: allChars[0],
+			width: supports.combining? 0 : allChars[0].length,
+			length: allChars[0].length,
 			visible: false,
 		};
 	} else {
@@ -45,9 +45,9 @@ export function readFirstCompleteChar(str: string, supports: SupportInfo = allSu
 		const emojiMatch = str.match(emojiRegexStarting);
 		if (emojiMatch) {
 			ret = {
-				data   : emojiMatch[0],
-				width  : 2,
-				length : emojiMatch[0].length,
+				data: emojiMatch[0],
+				width: 2,
+				length: emojiMatch[0].length,
 				visible: true,
 			};
 			if (!supports.emojiSequence) {
@@ -57,20 +57,22 @@ export function readFirstCompleteChar(str: string, supports: SupportInfo = allSu
 				}
 				ret.width = i * 2;
 			}
-		} else if (code > 0xFFFF) {
-			// Surrogates
+		} else if (code > 0xFFFF) { // Surrogates
 			ret = {
-				data   : str.slice(0, 2),
-				width  : isFullwidthCodePoint(code)? 2 : 1,
-				length : 2,
+				data: str.slice(0, 2),
+				width: 2,
+				length: 2,
 				visible: true,
 			};
+			if (supports.surrogates) {
+				ret.width = isFullwidthCodePoint(code)? 2 : 1;
+			}
 		} else {
 			// common unicode char
 			ret = commonSingleChar(str, code);
 		}
 	}
-
+	
 	// look ahead for combining chars
 	const nextCode = str.codePointAt(ret.length);
 	if (isCombiningCharacters(nextCode)) {
@@ -81,24 +83,24 @@ export function readFirstCompleteChar(str: string, supports: SupportInfo = allSu
 			ret.width += m[0].length;
 		}
 	}
-
+	
 	return ret;
 }
 
 function commonSingleChar(str: string, code: number) {
 	return {
-		data   : str[0],
-		width  : isFullwidthCodePoint(code)? 2 : 1,
-		length : 1,
+		data: str[0],
+		width: isFullwidthCodePoint(code)? 2 : 1,
+		length: 1,
 		visible: true,
 	};
 }
 
 function commonInvisible(str: string) {
 	return {
-		data   : str,
-		width  : 0,
-		length : str.length,
+		data: str,
+		width: 0,
+		length: str.length,
 		visible: false,
 	};
 }
