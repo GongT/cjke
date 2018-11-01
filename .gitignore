@@ -1,4 +1,4 @@
-.idea/
+.idea/*
 !.idea/cjke.iml
 !.idea/modules.xml
 !.idea/codeStyles

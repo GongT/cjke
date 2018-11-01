@@ -1,7 +1,14 @@
 //// - rollup
 //// - base
+export { emojiRegex } from './base';
+export { emojiRegexStarting } from './base';
+export { emojiSimpleRegex } from './base';
 export { SupportInfo } from './base';
+export { allSupport } from './base';
+export { windowsConsole } from './base';
+export { mintty } from './base';
 //// - combiningCharacters
+export { combiningCharactersRegex } from './combiningCharacters';
 export { isCombiningCharacters } from './combiningCharacters';
 //// - escapeUnicode
 export { unicodeEscape } from './escapeUnicode';

@@ -30,11 +30,12 @@
 		"is-fullwidth-code-point": "^2.0.0"
 	},
 	"devDependencies": {
-		"@gongt/export-all-in-one": "^1.0.8",
+		"@gongt/export-all-in-one": "^1.0.9",
 		"@types/chai": "^4.1.7",
 		"@types/emoji-regex": "^7.0.0",
 		"@types/mocha": "^5.2.5",
 		"chai": "^4.2.0",
+		"chokidar": "^2.0.4",
 		"mocha": "^2.5.3",
 		"rimraf": "^2.6.2",
 		"rollup": "^0.65.0",
